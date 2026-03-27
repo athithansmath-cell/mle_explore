@@ -1,0 +1,1327 @@
+<html lang="en" style="--body-font: Outfit,sans-serif; --dist-color: #4f8cff;"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MLE Explorer — Maximum Likelihood Estimation</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js"></script><style type="text/css">.CtxtMenu_InfoClose {  top:.2em; right:.2em;}
+.CtxtMenu_InfoContent {  overflow:auto; text-align:left; font-size:80%;  padding:.4em .6em; border:1px inset; margin:1em 0px;  max-height:20em; max-width:30em; background-color:#EEEEEE;  white-space:normal;}
+.CtxtMenu_Info.CtxtMenu_MousePost {outline:none;}
+.CtxtMenu_Info {  position:fixed; left:50%; width:auto; text-align:center;  border:3px outset; padding:1em 2em; background-color:#DDDDDD;  color:black;  cursor:default; font-family:message-box; font-size:120%;  font-style:normal; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 15px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius:15px;               /* Safari and Chrome */  -moz-border-radius:15px;                  /* Firefox */  -khtml-border-radius:15px;                /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */  filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color="gray", Positive="true"); /* IE */}
+</style><style type="text/css">.CtxtMenu_MenuClose {  position:absolute;  cursor:pointer;  display:inline-block;  border:2px solid #AAA;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  font-family: "Courier New", Courier;  font-size:24px;  color:#F0F0F0}
+.CtxtMenu_MenuClose span {  display:block; background-color:#AAA; border:1.5px solid;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  line-height:0;  padding:8px 0 6px     /* may need to be browser-specific */}
+.CtxtMenu_MenuClose:hover {  color:white!important;  border:2px solid #CCC!important}
+.CtxtMenu_MenuClose:hover span {  background-color:#CCC!important}
+.CtxtMenu_MenuClose:hover:focus {  outline:none}
+</style><style type="text/css">.CtxtMenu_Menu {  position:absolute;  background-color:white;  color:black;  width:auto; padding:5px 0px;  border:1px solid #CCCCCC; margin:0; cursor:default;  font: menu; text-align:left; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 5px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius: 5px;             /* Safari and Chrome */  -moz-border-radius: 5px;                /* Firefox */  -khtml-border-radius: 5px;              /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */}
+.CtxtMenu_MenuItem {  padding: 1px 2em;  background:transparent;}
+.CtxtMenu_MenuArrow {  position:absolute; right:.5em; padding-top:.25em; color:#666666;  font-family: null; font-size: .75em}
+.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {color:white}
+.CtxtMenu_MenuArrow.CtxtMenu_RTL {left:.5em; right:auto}
+.CtxtMenu_MenuCheck {  position:absolute; left:.7em;  font-family: null}
+.CtxtMenu_MenuCheck.CtxtMenu_RTL { right:.7em; left:auto }
+.CtxtMenu_MenuRadioCheck {  position:absolute; left: .7em;}
+.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {  right: .7em; left:auto}
+.CtxtMenu_MenuInputBox {  padding-left: 1em; right:.5em; color:#666666;  font-family: null;}
+.CtxtMenu_MenuInputBox.CtxtMenu_RTL {  left: .1em;}
+.CtxtMenu_MenuComboBox {  left:.1em; padding-bottom:.5em;}
+.CtxtMenu_MenuSlider {  left: .1em;}
+.CtxtMenu_SliderValue {  position:absolute; right:.1em; padding-top:.25em; color:#333333;  font-size: .75em}
+.CtxtMenu_SliderBar {  outline: none; background: #d3d3d3}
+.CtxtMenu_MenuLabel {  padding: 1px 2em 3px 1.33em;  font-style:italic}
+.CtxtMenu_MenuRule {  border-top: 1px solid #DDDDDD;  margin: 4px 3px;}
+.CtxtMenu_MenuDisabled {  color:GrayText}
+.CtxtMenu_MenuActive {  background-color: #606872;  color: white;}
+.CtxtMenu_MenuDisabled:focus {  background-color: #E8E8E8}
+.CtxtMenu_MenuLabel:focus {  background-color: #E8E8E8}
+.CtxtMenu_ContextMenu:focus {  outline:none}
+.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {  outline:none}
+.CtxtMenu_SelectionMenu {  position:relative; float:left;  border-bottom: none; -webkit-box-shadow:none; -webkit-border-radius:0px; }
+.CtxtMenu_SelectionItem {  padding-right: 1em;}
+.CtxtMenu_Selection {  right: 40%; width:50%; }
+.CtxtMenu_SelectionBox {  padding: 0em; max-height:20em; max-width: none;  background-color:#FFFFFF;}
+.CtxtMenu_SelectionDivider {  clear: both; border-top: 2px solid #000000;}
+.CtxtMenu_Menu .CtxtMenu_MenuClose {  top:-10px; left:-10px}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=JetBrains+Mono:wght@300;400;600&amp;family=Outfit:wght@300;400;500;600&amp;family=Lora:wght@400;600&amp;family=Fira+Code:wght@400;500&amp;family=Playfair+Display:wght@400;700&amp;family=IBM+Plex+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0a0c14; --surface:#111520; --card:#161b2e; --border:#1e2a45;
+  --text:#e2e8f0; --muted:#64748b; --dist-color:#4f8cff;
+  --body-font:'Outfit',sans-serif; --mono-font:'JetBrains Mono',monospace; --serif-font:'DM Serif Display',serif;
+}
+body.theme-light { --bg:#f4f6fb; --surface:#ffffff; --card:#ffffff; --border:#d1d9e6; --text:#1e293b; --muted:#64748b; }
+body.theme-sepia { --bg:#f5f0e8; --surface:#faf6ef; --card:#fff8f0; --border:#d4c5a9; --text:#3d2b1f; --muted:#8b7355; }
+body.theme-midnight { --bg:#060810; --surface:#0d1117; --card:#0f1724; --border:#1c2333; --text:#cdd9e5; --muted:#768390; }
+
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--body-font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s;}
+
+/* TOOLBAR */
+.toolbar{position:sticky;top:0;z-index:100;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;padding:9px 18px;flex-wrap:wrap;}
+.toolbar-brand{display:flex;align-items:center;gap:10px;margin-right:auto;cursor:pointer;}
+.toolbar-logo{width:34px;height:34px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:1.1rem;overflow:hidden;}
+.toolbar-logo img{width:100%;height:100%;object-fit:cover;display:none;}
+.toolbar-name{font-family:var(--mono-font);font-size:0.75rem;color:var(--muted);line-height:1.4;}
+.toolbar-name strong{color:var(--text);font-size:0.83rem;display:block;}
+.tb-sep{width:1px;height:26px;background:var(--border);margin:0 2px;}
+.tb-btn{font-size:0.77rem;font-family:var(--body-font);font-weight:500;padding:6px 13px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;white-space:nowrap;}
+.tb-btn:hover{border-color:var(--dist-color);color:var(--dist-color);}
+.tb-btn.active{background:var(--dist-color);border-color:var(--dist-color);color:#fff;}
+.tb-btn svg{width:14px;height:14px;flex-shrink:0;}
+
+/* PANEL */
+.panel-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .3s;}
+.panel-overlay.open{opacity:1;pointer-events:all;}
+.side-panel{position:fixed;top:0;right:0;bottom:0;width:min(430px,100vw);background:var(--card);border-left:1px solid var(--border);z-index:201;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.side-panel.open{transform:translateX(0);}
+.panel-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);background:color-mix(in srgb,var(--dist-color) 8%,var(--card));}
+.panel-header h3{font-family:var(--serif-font);font-size:1.05rem;color:var(--text);}
+.panel-close{width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.panel-close:hover{color:var(--text);border-color:var(--text);}
+.panel-body{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:20px;}
+
+/* PANEL COMPONENTS */
+.field-group{display:flex;flex-direction:column;gap:7px;}
+.field-label{font-family:var(--mono-font);font-size:0.66rem;text-transform:uppercase;letter-spacing:2px;color:var(--dist-color);}
+.field-input{font-family:var(--body-font);font-size:0.87rem;padding:9px 13px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--text);width:100%;outline:none;transition:border-color .2s;}
+.field-input:focus{border-color:var(--dist-color);}
+textarea.field-input{resize:vertical;min-height:72px;}
+.panel-section-title{font-size:0.68rem;font-family:var(--mono-font);text-transform:uppercase;letter-spacing:2px;color:var(--muted);padding-bottom:6px;border-bottom:1px solid var(--border);}
+.apply-btn{width:100%;padding:11px;border-radius:10px;border:none;background:var(--dist-color);color:#fff;font-family:var(--body-font);font-weight:600;font-size:0.88rem;cursor:pointer;transition:opacity .2s;}
+.apply-btn:hover{opacity:.85;}
+.apply-btn.ghost{background:var(--surface);border:1.5px solid var(--dist-color);color:var(--dist-color);}
+
+/* LOGO UPLOAD */
+.logo-upload-area{border:2px dashed var(--border);border-radius:12px;padding:18px;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
+.logo-upload-area:hover{border-color:var(--dist-color);}
+.logo-upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.logo-preview{width:58px;height:58px;border-radius:10px;object-fit:cover;margin:0 auto 8px;border:1px solid var(--border);display:block;}
+.logo-placeholder{font-size:2rem;margin-bottom:8px;display:block;}
+.logo-hint{font-size:0.75rem;color:var(--muted);font-family:var(--mono-font);}
+
+/* COLOR SWATCHES */
+.color-swatch{height:28px;border-radius:7px;border:2.5px solid transparent;cursor:pointer;transition:transform .15s,border-color .15s;}
+.color-swatch:hover{transform:scale(1.1);}
+.color-swatch.active{border-color:var(--text);transform:scale(1.06);}
+
+/* THEME / FONT CHIPS */
+.theme-row{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
+.theme-chip{padding:8px 4px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);font-size:0.7rem;text-align:center;cursor:pointer;transition:all .2s;font-family:var(--mono-font);}
+.theme-chip:hover,.theme-chip.active{border-color:var(--dist-color);color:var(--text);}
+.font-chips{display:flex;flex-wrap:wrap;gap:7px;}
+.font-chip{padding:6px 13px;border-radius:8px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);font-size:0.8rem;cursor:pointer;transition:all .2s;}
+.font-chip.active{border-color:var(--dist-color);color:var(--dist-color);background:color-mix(in srgb,var(--dist-color) 10%,var(--surface));}
+
+/* HERO */
+.hero{text-align:center;padding:50px 24px 38px;position:relative;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,color-mix(in srgb,var(--dist-color) 15%,transparent) 0%,transparent 70%);pointer-events:none;}
+.hero-badge{display:inline-block;font-family:var(--mono-font);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--dist-color);border:1px solid var(--dist-color);padding:4px 14px;border-radius:20px;margin-bottom:16px;opacity:.9;}
+.hero h1{font-family:var(--serif-font);font-size:clamp(2rem,5.5vw,3.8rem);line-height:1.1;background:linear-gradient(135deg,var(--text) 20%,var(--dist-color) 70%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px;}
+.hero-subtitle{color:var(--muted);font-size:1rem;max-width:520px;margin:0 auto 20px;line-height:1.65;}
+
+/* BRANDING STRIP */
+.branding-strip{display:flex;align-items:center;justify-content:center;gap:14px;padding:8px 24px 30px;}
+.branding-logo-wrap{width:46px;height:46px;border-radius:11px;border:1.5px solid var(--border);background:var(--surface);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+.branding-logo-wrap img{width:100%;height:100%;object-fit:cover;display:none;}
+.branding-info{text-align:left;}
+.branding-prepared{font-family:var(--mono-font);font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--muted);}
+.branding-name{font-size:0.95rem;font-weight:600;color:var(--text);}
+.branding-inst{font-size:0.78rem;color:var(--muted);}
+
+/* DIST TABS */
+.dist-tabs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:0 24px 34px;}
+.dist-tab{font-family:var(--body-font);font-size:0.85rem;font-weight:500;padding:9px 19px;border-radius:30px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:8px;}
+.dist-tab .dot{width:8px;height:8px;border-radius:50%;background:var(--muted);transition:background .25s;}
+.dist-tab.active{color:#fff;border-color:var(--tab-color,var(--dist-color));background:color-mix(in srgb,var(--tab-color,var(--dist-color)) 15%,var(--surface));box-shadow:0 0 18px color-mix(in srgb,var(--tab-color,var(--dist-color)) 30%,transparent);}
+.dist-tab.active .dot{background:var(--tab-color,var(--dist-color));}
+.dist-tab:hover{border-color:var(--dist-color);color:var(--text);}
+
+/* MAIN */
+.main{max-width:960px;margin:0 auto;padding:0 20px 80px;}
+.progress-bar{height:3px;background:var(--border);border-radius:2px;margin-bottom:22px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--dist-color);border-radius:2px;transition:width .4s ease;box-shadow:0 0 8px var(--dist-color);}
+.step-nav{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:22px;}
+.step-btn{flex:1;padding:13px 8px;font-family:var(--mono-font);font-size:0.7rem;text-align:center;cursor:pointer;color:var(--muted);border:none;background:transparent;border-right:1px solid var(--border);transition:all .2s;position:relative;}
+.step-btn:last-child{border-right:none;}
+.step-btn .step-num{display:block;font-size:1rem;font-weight:600;margin-bottom:2px;color:var(--muted);transition:color .2s;}
+.step-btn.active{background:color-mix(in srgb,var(--dist-color) 12%,var(--surface));color:var(--text);}
+.step-btn.active .step-num{color:var(--dist-color);}
+.step-btn.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--dist-color);}
+.step-btn:hover:not(.active){background:var(--card);color:var(--text);}
+.content-card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;min-height:420px;}
+.card-header{display:flex;align-items:center;gap:14px;padding:17px 24px;border-bottom:1px solid var(--border);background:color-mix(in srgb,var(--dist-color) 7%,var(--card));}
+.card-icon{width:40px;height:40px;border-radius:10px;background:color-mix(in srgb,var(--dist-color) 20%,transparent);display:flex;align-items:center;justify-content:center;font-size:1.2rem;border:1px solid color-mix(in srgb,var(--dist-color) 40%,transparent);}
+.card-header h2{font-family:var(--serif-font);font-size:1.18rem;color:var(--text);}
+.step-tag{margin-left:auto;font-family:var(--mono-font);font-size:0.67rem;padding:3px 11px;border-radius:20px;background:color-mix(in srgb,var(--dist-color) 15%,transparent);color:var(--dist-color);border:1px solid color-mix(in srgb,var(--dist-color) 35%,transparent);}
+.card-body{padding:24px;animation:fadeIn .35s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.math-block{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:17px 20px;margin:13px 0;position:relative;overflow:hidden;}
+.math-block::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--dist-color);border-radius:0 3px 3px 0;}
+.math-block .label{font-family:var(--mono-font);font-size:0.66rem;text-transform:uppercase;letter-spacing:2px;color:var(--dist-color);margin-bottom:9px;display:block;}
+.prose{color:var(--muted);font-size:0.92rem;line-height:1.75;margin:11px 0;}
+.prose strong{color:var(--text);}
+.conclusion{background:color-mix(in srgb,var(--dist-color) 10%,transparent);border:1px solid color-mix(in srgb,var(--dist-color) 35%,transparent);border-radius:12px;padding:15px 19px;margin-top:16px;display:flex;align-items:flex-start;gap:11px;}
+.conclusion .icon{font-size:1.25rem;}
+.conclusion .text{font-size:0.9rem;line-height:1.65;color:var(--text);}
+.conclusion .text strong{color:var(--dist-color);}
+.param-pills{display:flex;flex-wrap:wrap;gap:8px;margin:11px 0;}
+.param-pill{font-family:var(--mono-font);font-size:0.79rem;padding:5px 12px;border-radius:8px;background:var(--surface);border:1px solid var(--border);color:var(--text);}
+.param-pill span{color:var(--dist-color);}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:12px;}
+.nav-btn{font-family:var(--body-font);font-weight:500;font-size:0.87rem;padding:10px 23px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:7px;}
+.nav-btn:hover{border-color:var(--dist-color);}
+.nav-btn.primary{background:var(--dist-color);border-color:var(--dist-color);color:#000;font-weight:600;}
+.nav-btn.primary:hover{opacity:.87;}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+
+/* FOOTER */
+.footer-main{border-top:1px solid var(--border);padding:24px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}
+.footer-brand{display:flex;align-items:center;gap:10px;}
+.footer-logo-wrap{width:36px;height:36px;border-radius:9px;border:1.5px solid var(--border);background:var(--surface);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+.footer-logo-wrap img{width:100%;height:100%;object-fit:cover;display:none;}
+.footer-meta{font-family:var(--mono-font);font-size:0.7rem;line-height:1.5;color:var(--muted);}
+.footer-meta strong{color:var(--text);display:block;}
+.footer-copy{font-family:var(--mono-font);font-size:0.69rem;color:var(--muted);text-align:right;}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--dist-color);color:#fff;font-family:var(--mono-font);font-size:0.8rem;padding:9px 22px;border-radius:30px;box-shadow:0 4px 24px rgba(0,0,0,.4);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:300;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+mjx-container{overflow-x:auto;max-width:100%;}
+
+@media(max-width:600px){
+  .step-btn .step-label{display:none;}
+  .step-btn{font-size:0.6rem;}
+  .card-body{padding:15px;}
+  .tb-btn span{display:none;}
+  .footer-main{flex-direction:column;text-align:center;}
+  .footer-copy{text-align:center;}
+}
+@media print{
+  .toolbar,.side-panel,.panel-overlay,.toast,.nav-row,.step-nav,.dist-tabs,.progress-bar{display:none!important;}
+  .content-card{border:none;box-shadow:none;}
+  body{background:#fff;color:#000;}
+}
+</style>
+<style id="MJX-CHTML-styles">
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-mi {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-mo {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-stretchy-h {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-stretchy-h > * {
+  display: table-cell;
+  width: 0;
+}
+
+mjx-stretchy-h > * > mjx-c {
+  display: inline-block;
+  transform: scalex(1.0000001);
+}
+
+mjx-stretchy-h > * > mjx-c::before {
+  display: inline-block;
+  width: initial;
+}
+
+mjx-stretchy-h > mjx-ext {
+  /* IE */ overflow: hidden;
+  /* others */ overflow: clip visible;
+  width: 100%;
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c::before {
+  transform: scalex(500);
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c {
+  width: 0;
+}
+
+mjx-stretchy-h > mjx-beg > mjx-c {
+  margin-right: -.1em;
+}
+
+mjx-stretchy-h > mjx-end > mjx-c {
+  margin-left: -.1em;
+}
+
+mjx-stretchy-v {
+  display: inline-block;
+}
+
+mjx-stretchy-v > * {
+  display: block;
+}
+
+mjx-stretchy-v > mjx-beg {
+  height: 0;
+}
+
+mjx-stretchy-v > mjx-end > mjx-c {
+  display: block;
+}
+
+mjx-stretchy-v > * > mjx-c {
+  transform: scaley(1.0000001);
+  transform-origin: left center;
+  overflow: hidden;
+}
+
+mjx-stretchy-v > mjx-ext {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+  border: 0px solid transparent;
+  /* IE */ overflow: hidden;
+  /* others */ overflow: visible clip;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c::before {
+  width: initial;
+  box-sizing: border-box;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c {
+  transform: scaleY(500) translateY(.075em);
+  overflow: visible;
+}
+
+mjx-mark {
+  display: inline-block;
+  height: 0px;
+}
+
+mjx-mrow {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mfrac {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-frac {
+  display: inline-block;
+  vertical-align: 0.17em;
+  padding: 0 .22em;
+}
+
+mjx-frac[type="d"] {
+  vertical-align: .04em;
+}
+
+mjx-frac[delims] {
+  padding: 0 .1em;
+}
+
+mjx-frac[atop] {
+  padding: 0 .12em;
+}
+
+mjx-frac[atop][delims] {
+  padding: 0;
+}
+
+mjx-dtable {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-dtable > * {
+  font-size: 2000%;
+}
+
+mjx-dbox {
+  display: block;
+  font-size: 5%;
+}
+
+mjx-num {
+  display: block;
+  text-align: center;
+}
+
+mjx-den {
+  display: block;
+  text-align: center;
+}
+
+mjx-mfrac[bevelled] > mjx-num {
+  display: inline-block;
+}
+
+mjx-mfrac[bevelled] > mjx-den {
+  display: inline-block;
+}
+
+mjx-den[align="right"], mjx-num[align="right"] {
+  text-align: right;
+}
+
+mjx-den[align="left"], mjx-num[align="left"] {
+  text-align: left;
+}
+
+mjx-nstrut {
+  display: inline-block;
+  height: .054em;
+  width: 0;
+  vertical-align: -.054em;
+}
+
+mjx-nstrut[type="d"] {
+  height: .217em;
+  vertical-align: -.217em;
+}
+
+mjx-dstrut {
+  display: inline-block;
+  height: .505em;
+  width: 0;
+}
+
+mjx-dstrut[type="d"] {
+  height: .726em;
+}
+
+mjx-line {
+  display: block;
+  box-sizing: border-box;
+  min-height: 1px;
+  height: .06em;
+  border-top: .06em solid;
+  margin: .06em -.1em;
+  overflow: hidden;
+}
+
+mjx-line[type="d"] {
+  margin: .18em -.1em;
+}
+
+mjx-msup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mspace {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c1D453.TEX-I::before {
+  padding: 0.705em 0.55em 0.205em 0;
+  content: "f";
+}
+
+mjx-c.mjx-c28::before {
+  padding: 0.75em 0.389em 0.25em 0;
+  content: "(";
+}
+
+mjx-c.mjx-c1D465.TEX-I::before {
+  padding: 0.442em 0.572em 0.011em 0;
+  content: "x";
+}
+
+mjx-c.mjx-c2223::before {
+  padding: 0.75em 0.278em 0.249em 0;
+  content: "\2223";
+}
+
+mjx-c.mjx-c1D45D.TEX-I::before {
+  padding: 0.442em 0.503em 0.194em 0;
+  content: "p";
+}
+
+mjx-c.mjx-c29::before {
+  padding: 0.75em 0.389em 0.25em 0;
+  content: ")";
+}
+
+mjx-c.mjx-c3D::before {
+  padding: 0.583em 0.778em 0.082em 0;
+  content: "=";
+}
+
+mjx-c.mjx-c28.TEX-S3::before {
+  padding: 1.45em 0.736em 0.949em 0;
+  content: "(";
+}
+
+mjx-c.mjx-c1D45B.TEX-I::before {
+  padding: 0.442em 0.6em 0.011em 0;
+  content: "n";
+}
+
+mjx-c.mjx-c29.TEX-S3::before {
+  padding: 1.45em 0.736em 0.949em 0;
+  content: ")";
+}
+
+mjx-c.mjx-c31::before {
+  padding: 0.666em 0.5em 0 0;
+  content: "1";
+}
+
+mjx-c.mjx-c2212::before {
+  padding: 0.583em 0.778em 0.082em 0;
+  content: "\2212";
+}
+
+mjx-c.mjx-c2C::before {
+  padding: 0.121em 0.278em 0.194em 0;
+  content: ",";
+}
+
+mjx-c.mjx-c30::before {
+  padding: 0.666em 0.5em 0.022em 0;
+  content: "0";
+}
+
+mjx-c.mjx-c2026::before {
+  padding: 0.12em 1.172em 0 0;
+  content: "\2026";
+}
+</style></head>
+<body class="">
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="toolbar-brand" onclick="openPanel('branding')" title="Edit Branding">
+    <div class="toolbar-logo" id="tbLogo">🎓<img id="tbLogoImg" src="" alt="" style="display: none;"></div>
+    <div class="toolbar-name"><strong id="tbName">Your Name</strong><span id="tbInst">Institution · Course Code</span></div>
+  </div>
+  <div class="tb-sep"></div>
+  <button class="tb-btn" onclick="openPanel('branding')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"></path></svg><span>Branding</span>
+  </button>
+  <button class="tb-btn" onclick="openPanel('appearance')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"></path></svg><span>Appearance</span>
+  </button>
+  <button class="tb-btn" onclick="openPanel('content')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg><span>Edit Content</span>
+  </button>
+  <div class="tb-sep"></div>
+  <button class="tb-btn" onclick="printPage()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg><span>Print / PDF</span>
+  </button>
+  <button class="tb-btn" onclick="exportHTML()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg><span>Export</span>
+  </button>
+</div>
+
+<!-- PANEL OVERLAY -->
+<div class="panel-overlay" id="panelOverlay" onclick="closePanel()"></div>
+
+<!-- SIDE PANEL -->
+<div class="side-panel" id="sidePanel">
+  <div class="panel-header">
+    <h3 id="panelTitle">✏️ Edit Content</h3>
+    <button class="panel-close" onclick="closePanel()">✕</button>
+  </div>
+  <div class="panel-body" id="panelBody">
+    <div class="panel-section-title">Hero Section</div>
+    <div class="field-group">
+      <label class="field-label">Badge Text</label>
+      <input class="field-input" id="fBadge" value="Statistical Inference" placeholder="Statistical Inference">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Main Title (\n = line break)</label>
+      <input class="field-input" id="fTitle" value="Maximum Likelihood
+Estimation" placeholder="Maximum Likelihood\nEstimation">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Subtitle Description</label>
+      <textarea class="field-input" id="fSubtitle">Explore MLE step-by-step across six fundamental probability distributions — from writing the PDF to verifying the maximum via second derivative test.</textarea>
+    </div>
+    <button class="apply-btn" onclick="saveContent()">✓ Apply Changes</button>
+
+    <div class="panel-section-title" style="margin-top:4px">Add Custom Notes to Steps</div>
+    <p class="prose" style="font-size:0.81rem;margin:0">Select distribution and step, then add your own notes or worked examples:</p>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0">
+      <button class="tb-btn active" onclick="switchEditDist(0)" style="font-size:0.73rem;padding:5px 10px">🎲 Binomial</button><button class="tb-btn " onclick="switchEditDist(1)" style="font-size:0.73rem;padding:5px 10px">⚡ Poisson</button><button class="tb-btn " onclick="switchEditDist(2)" style="font-size:0.73rem;padding:5px 10px">📏 Uniform</button><button class="tb-btn " onclick="switchEditDist(3)" style="font-size:0.73rem;padding:5px 10px">📉 Exponential</button><button class="tb-btn " onclick="switchEditDist(4)" style="font-size:0.73rem;padding:5px 10px">🔢 Geometric</button><button class="tb-btn " onclick="switchEditDist(5)" style="font-size:0.73rem;padding:5px 10px">🔔 Normal</button>
+    </div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap;margin:6px 0">
+      <button class="tb-btn active" onclick="switchEditStep(0)" style="font-size:0.7rem;padding:4px 9px">PDF/PMF</button><button class="tb-btn " onclick="switchEditStep(1)" style="font-size:0.7rem;padding:4px 9px">Likelihood</button><button class="tb-btn " onclick="switchEditStep(2)" style="font-size:0.7rem;padding:4px 9px">Log-Likeli.</button><button class="tb-btn " onclick="switchEditStep(3)" style="font-size:0.7rem;padding:4px 9px">1st Deriv.</button><button class="tb-btn " onclick="switchEditStep(4)" style="font-size:0.7rem;padding:4px 9px">2nd Deriv.</button>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Note for Binomial — PDF/PMF</label>
+      <textarea class="field-input" id="fNote" placeholder="Add additional notes, worked examples, or remarks…" style="min-height:90px"></textarea>
+    </div>
+    <button class="apply-btn ghost" onclick="saveNote()">+ Append Note</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge" id="heroBadge">Statistical Inference</div>
+  <h1 id="heroTitle">Maximum Likelihood<br>Estimation</h1>
+  <p class="hero-subtitle" id="heroSubtitle">Explore MLE step-by-step across six fundamental probability distributions — from writing the PDF to verifying the maximum via second derivative test.</p>
+</div>
+
+<!-- BRANDING STRIP -->
+<div class="branding-strip" id="brandingStrip">
+  <div class="branding-logo-wrap" id="brandLogoWrap">🎓<img id="brandLogoImg" src="" alt="" style="display: none;"></div>
+  <div class="branding-info">
+    <div class="branding-prepared">Prepared by</div>
+    <div class="branding-name" id="brandName">Your Name</div>
+    <div class="branding-inst" id="brandInst">Institution · Course Code</div>
+  </div>
+</div>
+
+<!-- DIST TABS -->
+<div class="dist-tabs" id="distTabs"><button class="dist-tab active" style="--tab-color:#4f8cff" onclick="selectDist(0)"><span class="dot"></span>🎲 Binomial</button><button class="dist-tab " style="--tab-color:#a78bfa" onclick="selectDist(1)"><span class="dot"></span>⚡ Poisson</button><button class="dist-tab " style="--tab-color:#34d399" onclick="selectDist(2)"><span class="dot"></span>📏 Uniform</button><button class="dist-tab " style="--tab-color:#fb923c" onclick="selectDist(3)"><span class="dot"></span>📉 Exponential</button><button class="dist-tab " style="--tab-color:#f472b6" onclick="selectDist(4)"><span class="dot"></span>🔢 Geometric</button><button class="dist-tab " style="--tab-color:#facc15" onclick="selectDist(5)"><span class="dot"></span>🔔 Normal</button></div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 20%;"></div></div>
+  <div class="step-nav" id="stepNav"><button class="step-btn active" onclick="selectStep(0)"><span class="step-num">f(x)</span><span class="step-label">PDF/PMF</span></button><button class="step-btn " onclick="selectStep(1)"><span class="step-num">L(θ)</span><span class="step-label">Likelihood</span></button><button class="step-btn " onclick="selectStep(2)"><span class="step-num">ℓ(θ)</span><span class="step-label">Log-Likeli.</span></button><button class="step-btn " onclick="selectStep(3)"><span class="step-num">ℓ'(θ)</span><span class="step-label">1st Deriv.</span></button><button class="step-btn " onclick="selectStep(4)"><span class="step-num">ℓ''(θ)</span><span class="step-label">2nd Deriv.</span></button></div>
+  <div class="content-card">
+    <div class="card-header">
+      <div class="card-icon" id="cardIcon">🎲</div>
+      <h2 id="cardTitle">Binomial Distribution — PDF / PMF</h2>
+      <div class="step-tag" id="stepTag">Step 1 of 5</div>
+    </div>
+    <div class="card-body" id="cardBody"><p class="prose">The <strong>Binomial distribution</strong> models the number of successes in <strong>n</strong> independent Bernoulli trials, each with success probability <strong>p</strong>. The parameter to be estimated is <strong>p</strong>, with <strong>n</strong> assumed known.</p><div class="param-pills"><div class="param-pill">Parameter: <span>p ∈ (0,1)</span></div><div class="param-pill">Support: <span>x = 0,1,…,n</span></div><div class="param-pill">n is <span>fixed &amp; known</span></div></div><div class="math-block"><span class="label">Probability Mass Function</span><mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" display="true" tabindex="0" ctxtmenu_counter="0" style="font-size: 117.4%; position: relative;"><mjx-math display="true" class="MJX-TEX" aria-hidden="true" style="margin-left: 0px; margin-right: 0px;"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c2223"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="4"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mrow space="4"><mjx-texatom texclass="OPEN"><mjx-mo class="mjx-s3"><mjx-c class="mjx-c28 TEX-S3"></mjx-c></mjx-mo></mjx-texatom><mjx-mfrac><mjx-frac type="d" atop="true" delims="true" style="vertical-align: -0.686em;"><mjx-num style="padding-bottom: 0.909em;"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-num><mjx-den><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi></mjx-den></mjx-frac></mjx-mfrac><mjx-texatom texclass="CLOSE"><mjx-mo class="mjx-s3"><mjx-c class="mjx-c29 TEX-S3"></mjx-c></mjx-mo></mjx-texatom></mjx-mrow><mjx-msup><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: 0.413em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msup><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2212"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="3"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi><mjx-msup><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo><mjx-script style="vertical-align: 0.413em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c2212"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-script></mjx-msup><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-mstyle><mjx-mspace style="width: 1em;"></mjx-mspace></mjx-mstyle><mjx-mi class="mjx-i" space="2"><mjx-c class="mjx-c1D465 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c30"></mjx-c></mjx-mn><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="2"><mjx-c class="mjx-c31"></mjx-c></mjx-mn><mjx-mo class="mjx-n"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-mo class="mjx-n" space="2"><mjx-c class="mjx-c2026"></mjx-c></mjx-mo><mjx-mo class="mjx-n" space="2"><mjx-c class="mjx-c2C"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="2"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>∣</mo><mi>p</mi><mo stretchy="false">)</mo><mo>=</mo><mrow data-mjx-texclass="ORD"><mrow data-mjx-texclass="OPEN"><mo minsize="2.047em" maxsize="2.047em">(</mo></mrow><mfrac linethickness="0"><mi>n</mi><mi>x</mi></mfrac><mrow data-mjx-texclass="CLOSE"><mo minsize="2.047em" maxsize="2.047em">)</mo></mrow></mrow><msup><mi>p</mi><mi>x</mi></msup><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><msup><mo stretchy="false">)</mo><mrow data-mjx-texclass="ORD"><mi>n</mi><mo>−</mo><mi>x</mi></mrow></msup><mo>,</mo><mstyle scriptlevel="0"><mspace width="1em"></mspace></mstyle><mi>x</mi><mo>=</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>,</mo><mo>…</mo><mo>,</mo><mi>n</mi></math></mjx-assistive-mml></mjx-container></div><div class="conclusion"><div class="icon">📌</div><div class="text">The PMF has two parts: a combinatorial coefficient (constant w.r.t. <strong>p</strong>) and the probability piece <strong>p<sup>x</sup>(1−p)<sup>n−x</sup></strong> which carries all information about p.</div></div></div>
+  </div>
+  <div class="nav-row">
+    <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled="">← Previous</button>
+    <div style="font-family:var(--mono-font);font-size:0.74rem;color:var(--muted)" id="stepIndicator">Step 1 / 5</div>
+    <button class="nav-btn primary" id="nextBtn" onclick="navigate(1)">Next →</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer-main">
+  <div class="footer-brand">
+    <div class="footer-logo-wrap" id="footerLogoWrap">🎓<img id="footerLogoImg" src="" alt="" style="display: none;"></div>
+    <div class="footer-meta"><strong id="footerName">Your Name</strong><span id="footerInst">Institution · Course Code</span></div>
+  </div>
+  <div class="footer-copy">MLE Explorer · Statistical Inference<br><span id="footerYear">© 2026</span></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✓ Saved</div>
+
+<script>
+/* ═══════ DATA ═══════ */
+const DISTS=[
+  {id:'binomial',name:'Binomial',icon:'🎲',color:'#4f8cff',steps:[
+    {title:'PDF / PMF',content:`<p class="prose">The <strong>Binomial distribution</strong> models the number of successes in <strong>n</strong> independent Bernoulli trials, each with success probability <strong>p</strong>. The parameter to be estimated is <strong>p</strong>, with <strong>n</strong> assumed known.</p><div class="param-pills"><div class="param-pill">Parameter: <span>p ∈ (0,1)</span></div><div class="param-pill">Support: <span>x = 0,1,…,n</span></div><div class="param-pill">n is <span>fixed & known</span></div></div><div class="math-block"><span class="label">Probability Mass Function</span>$$f(x\\mid p)=\\binom{n}{x}p^x(1-p)^{n-x},\\quad x=0,1,\\ldots,n$$</div><div class="conclusion"><div class="icon">📌</div><div class="text">The PMF has two parts: a combinatorial coefficient (constant w.r.t. <strong>p</strong>) and the probability piece <strong>p<sup>x</sup>(1−p)<sup>n−x</sup></strong> which carries all information about p.</div></div>`},
+    {title:'Likelihood',content:`<p class="prose">Given a random sample <strong>x₁, x₂, …, x<sub>m</sub></strong>, the likelihood is the product of individual PMFs.</p><div class="math-block"><span class="label">Likelihood Function</span>$$L(p)=\\prod_{i=1}^m\\binom{n}{x_i}p^{x_i}(1-p)^{n-x_i}=\\left(\\prod_{i=1}^m\\binom{n}{x_i}\\right)p^{S}(1-p)^{mn-S}$$</div><p class="prose">Let <strong>S = Σxᵢ</strong> be the total successes.</p><div class="conclusion"><div class="icon">💡</div><div class="text"><strong>Key insight:</strong> The likelihood depends on data only through sufficient statistic <strong>S = Σxᵢ</strong>.</div></div>`},
+    {title:'Log-Likelihood',content:`<p class="prose">Taking the natural logarithm converts products to sums and makes differentiation tractable.</p><div class="math-block"><span class="label">Log-Likelihood Function</span>$$\\ell(p)=\\text{const}+S\\ln p+(mn-S)\\ln(1-p)$$</div><div class="conclusion"><div class="icon">✍️</div><div class="text">Maximising ℓ(p) gives the same solution as maximising L(p) since ln is monotone increasing.</div></div>`},
+    {title:'1st Derivative & MLE',content:`<p class="prose">Differentiate ℓ(p) w.r.t. p and set equal to zero (score equation).</p><div class="math-block"><span class="label">Score Equation</span>$$\\frac{d\\ell}{dp}=\\frac{S}{p}-\\frac{mn-S}{1-p}=0$$</div><div class="math-block"><span class="label">Solving for p̂</span>$$S(1-p)=p(mn-S)\\implies S=pmn\\implies\\hat{p}=\\frac{S}{mn}=\\frac{\\bar{x}}{n}$$</div><div class="conclusion"><div class="icon">🎯</div><div class="text">The MLE of <strong>p</strong> is the <strong>sample proportion of successes</strong>: p̂ = x̄/n.</div></div>`},
+    {title:'2nd Derivative Test',content:`<p class="prose">Verify the stationary point is a maximum by confirming the second derivative is negative.</p><div class="math-block"><span class="label">Second Derivative</span>$$\\frac{d^2\\ell}{dp^2}=-\\frac{S}{p^2}-\\frac{mn-S}{(1-p)^2}$$</div><div class="math-block"><span class="label">At p̂ = S/(mn)</span>$$\\left.\\frac{d^2\\ell}{dp^2}\\right|_{p=\\hat{p}}=-\\frac{mn}{\\hat{p}(1-\\hat{p})}<0$$</div><div class="conclusion"><div class="icon">✅</div><div class="text">Since p̂ ∈ (0,1), the second derivative is strictly <strong>negative</strong>. This confirms p̂ = x̄/n is a <strong>global maximum</strong>.</div></div>`}
+  ]},
+  {id:'poisson',name:'Poisson',icon:'⚡',color:'#a78bfa',steps:[
+    {title:'PDF / PMF',content:`<p class="prose">The <strong>Poisson distribution</strong> models the number of events in a fixed interval when events occur at constant average rate <strong>λ</strong>.</p><div class="param-pills"><div class="param-pill">Parameter: <span>λ > 0</span></div><div class="param-pill">Support: <span>x = 0,1,2,…</span></div></div><div class="math-block"><span class="label">Probability Mass Function</span>$$f(x\\mid\\lambda)=\\frac{e^{-\\lambda}\\lambda^x}{x!},\\quad x=0,1,2,\\ldots$$</div><div class="conclusion"><div class="icon">📌</div><div class="text">Mean = Variance = <strong>λ</strong>. Single parameter fully characterises the distribution.</div></div>`},
+    {title:'Likelihood',content:`<div class="math-block"><span class="label">Likelihood Function</span>$$L(\\lambda)=\\prod_{i=1}^n\\frac{e^{-\\lambda}\\lambda^{x_i}}{x_i!}=\\frac{e^{-n\\lambda}\\lambda^{\\sum x_i}}{\\prod x_i!}$$</div><div class="conclusion"><div class="icon">💡</div><div class="text">Sufficient statistic is <strong>T = Σxᵢ</strong>. The denominator ∏xᵢ! is constant w.r.t. λ.</div></div>`},
+    {title:'Log-Likelihood',content:`<div class="math-block"><span class="label">Log-Likelihood Function</span>$$\\ell(\\lambda)=-n\\lambda+\\left(\\sum x_i\\right)\\ln\\lambda-\\sum\\ln(x_i!)$$</div><div class="math-block"><span class="label">Simplified</span>$$\\ell(\\lambda)\\propto -n\\lambda+n\\bar{x}\\ln\\lambda$$</div><div class="conclusion"><div class="icon">✍️</div><div class="text">Strictly concave in λ → unique global maximum guaranteed.</div></div>`},
+    {title:'1st Derivative & MLE',content:`<div class="math-block"><span class="label">Score Equation</span>$$\\frac{d\\ell}{d\\lambda}=-n+\\frac{\\sum x_i}{\\lambda}=0$$</div><div class="math-block"><span class="label">Solving for λ̂</span>$$\\hat{\\lambda}=\\frac{\\sum x_i}{n}=\\bar{x}$$</div><div class="conclusion"><div class="icon">🎯</div><div class="text">The MLE of <strong>λ</strong> is the <strong>sample mean x̄</strong>. Since E[X]=λ, we estimate it by the observed average.</div></div>`},
+    {title:'2nd Derivative Test',content:`<div class="math-block"><span class="label">Second Derivative</span>$$\\frac{d^2\\ell}{d\\lambda^2}=-\\frac{n\\bar{x}}{\\lambda^2}$$</div><div class="math-block"><span class="label">At λ̂ = x̄</span>$$\\left.\\frac{d^2\\ell}{d\\lambda^2}\\right|_{\\hat{\\lambda}}=-\\frac{n}{\\bar{x}}<0$$</div><div class="conclusion"><div class="icon">✅</div><div class="text">Second derivative strictly <strong>negative</strong>. Log-likelihood is strictly concave → <strong>λ̂ = x̄ is the unique global maximum</strong>.</div></div>`}
+  ]},
+  {id:'uniform',name:'Uniform',icon:'📏',color:'#34d399',steps:[
+    {title:'PDF',content:`<p class="prose">The <strong>Uniform(0,θ)</strong> distribution assigns equal density 1/θ to every point in [0,θ]. We estimate the upper bound <strong>θ</strong>.</p><div class="param-pills"><div class="param-pill">Parameter: <span>θ > 0</span></div><div class="param-pill">Support: <span>0 ≤ x ≤ θ</span></div></div><div class="math-block"><span class="label">Probability Density Function</span>$$f(x\\mid\\theta)=\\frac{1}{\\theta},\\quad 0\\leq x\\leq\\theta$$</div><div class="conclusion"><div class="icon">⚠️</div><div class="text">This is a <strong>non-regular</strong> distribution — the support depends on θ. Classical calculus-based MLE will fail here!</div></div>`},
+    {title:'Likelihood',content:`<p class="prose">All observations must satisfy xᵢ ≤ θ for the likelihood to be non-zero.</p><div class="math-block"><span class="label">Likelihood Function</span>$$L(\\theta)=\\frac{1}{\\theta^n}\\cdot\\mathbf{1}(\\theta\\geq x_{(n)})$$</div><p class="prose">where <strong>x₍ₙ₎ = max(x₁,…,xₙ)</strong> is the sample maximum.</p><div class="conclusion"><div class="icon">💡</div><div class="text">L(θ) = θ⁻ⁿ for θ ≥ x₍ₙ₎ and 0 otherwise — a <strong>decreasing function</strong> of θ on its valid domain!</div></div>`},
+    {title:'Log-Likelihood',content:`<div class="math-block"><span class="label">Log-Likelihood (for θ ≥ x₍ₙ₎)</span>$$\\ell(\\theta)=-n\\ln\\theta,\\quad\\theta\\geq x_{(n)}$$</div><div class="conclusion"><div class="icon">🔍</div><div class="text">Since ℓ(θ) = −n ln θ is <strong>strictly decreasing</strong>, the maximum occurs at the <strong>smallest allowable θ</strong> = x₍ₙ₎.</div></div>`},
+    {title:'MLE via Boundary',content:`<div class="math-block"><span class="label">Derivative (for θ > x₍ₙ₎)</span>$$\\frac{d\\ell}{d\\theta}=-\\frac{n}{\\theta}<0\\quad\\text{for all }\\theta>0$$</div><div class="math-block"><span class="label">MLE (Boundary Solution)</span>$$\\hat{\\theta}_{MLE}=x_{(n)}=\\max(x_1,\\ldots,x_n)$$</div><div class="conclusion"><div class="icon">🎯</div><div class="text">The MLE is the <strong>sample maximum</strong> — a boundary solution. Note: x₍ₙ₎ is biased; UMVUE = (n+1)x₍ₙ₎/n.</div></div>`},
+    {title:'2nd Derivative Test',content:`<div class="math-block"><span class="label">Second Derivative</span>$$\\frac{d^2\\ell}{d\\theta^2}=\\frac{n}{\\theta^2}>0\\quad\\text{for all }\\theta>0$$</div><div class="math-block"><span class="label">Boundary Argument</span>$$L(\\theta)=\\begin{cases}\\theta^{-n}&\\theta\\geq x_{(n)}\\\\0&\\theta<x_{(n)}\\end{cases}\\implies\\text{Maximum at }\\theta=x_{(n)}$$</div><div class="conclusion"><div class="icon">✅</div><div class="text">The 2nd derivative test for interior maxima <strong>does not apply</strong>. The maximum is identified by <strong>monotone decrease</strong> of L(θ). θ̂ = x₍ₙ₎ is confirmed as MLE.</div></div>`}
+  ]},
+  {id:'exponential',name:'Exponential',icon:'📉',color:'#fb923c',steps:[
+    {title:'PDF',content:`<p class="prose">The <strong>Exponential distribution</strong> models waiting times between Poisson events. <strong>λ</strong> is the rate (events per unit time).</p><div class="param-pills"><div class="param-pill">Parameter: <span>λ > 0</span></div><div class="param-pill">Support: <span>x > 0</span></div><div class="param-pill">Mean: <span>1/λ</span></div></div><div class="math-block"><span class="label">Probability Density Function</span>$$f(x\\mid\\lambda)=\\lambda e^{-\\lambda x},\\quad x>0$$</div><div class="conclusion"><div class="icon">📌</div><div class="text">The exponential distribution is <strong>memoryless</strong>: P(X > s+t | X > s) = P(X > t). It belongs to the exponential family.</div></div>`},
+    {title:'Likelihood',content:`<div class="math-block"><span class="label">Likelihood Function</span>$$L(\\lambda)=\\prod_{i=1}^n\\lambda e^{-\\lambda x_i}=\\lambda^n e^{-n\\lambda\\bar{x}}$$</div><div class="conclusion"><div class="icon">💡</div><div class="text">Sufficient statistic is <strong>T = Σxᵢ</strong>. Likelihood = λⁿ × exponential decay term.</div></div>`},
+    {title:'Log-Likelihood',content:`<div class="math-block"><span class="label">Log-Likelihood Function</span>$$\\ell(\\lambda)=n\\ln\\lambda-n\\lambda\\bar{x}$$</div><div class="conclusion"><div class="icon">✍️</div><div class="text">Logarithmic growth (n ln λ) balanced against linear decay (−nλx̄). Strictly concave → unique global maximum.</div></div>`},
+    {title:'1st Derivative & MLE',content:`<div class="math-block"><span class="label">Score Equation</span>$$\\frac{d\\ell}{d\\lambda}=\\frac{n}{\\lambda}-n\\bar{x}=0$$</div><div class="math-block"><span class="label">Solving for λ̂</span>$$\\hat{\\lambda}=\\frac{1}{\\bar{x}}$$</div><div class="conclusion"><div class="icon">🎯</div><div class="text">MLE of the rate is the <strong>reciprocal of the sample mean</strong>: λ̂ = 1/x̄. Equivalently, MLE of the mean is x̄.</div></div>`},
+    {title:'2nd Derivative Test',content:`<div class="math-block"><span class="label">Second Derivative</span>$$\\frac{d^2\\ell}{d\\lambda^2}=-\\frac{n}{\\lambda^2}$$</div><div class="math-block"><span class="label">At λ̂ = 1/x̄</span>$$\\left.\\frac{d^2\\ell}{d\\lambda^2}\\right|_{\\hat{\\lambda}}=-n\\bar{x}^2<0$$</div><div class="conclusion"><div class="icon">✅</div><div class="text">−n/λ² is strictly <strong>negative</strong> for all λ > 0. Log-likelihood is globally concave → <strong>λ̂ = 1/x̄ is the unique global maximum</strong>.</div></div>`}
+  ]},
+  {id:'geometric',name:'Geometric',icon:'🔢',color:'#f472b6',steps:[
+    {title:'PMF',content:`<p class="prose">The <strong>Geometric distribution</strong> models the number of Bernoulli trials until the <strong>first success</strong>.</p><div class="param-pills"><div class="param-pill">Parameter: <span>p ∈ (0,1)</span></div><div class="param-pill">Support: <span>x = 1,2,3,…</span></div><div class="param-pill">Mean: <span>1/p</span></div></div><div class="math-block"><span class="label">Probability Mass Function</span>$$f(x\\mid p)=(1-p)^{x-1}p,\\quad x=1,2,3,\\ldots$$</div><div class="conclusion"><div class="icon">📌</div><div class="text">Like the exponential, the geometric is <strong>memoryless</strong>: P(X > m+n | X > m) = P(X > n).</div></div>`},
+    {title:'Likelihood',content:`<div class="math-block"><span class="label">Likelihood Function</span>$$L(p)=\\prod_{i=1}^n(1-p)^{x_i-1}p=p^n(1-p)^{S-n},\\quad S=\\sum x_i$$</div><div class="conclusion"><div class="icon">💡</div><div class="text">Sufficient statistic is <strong>T = Σxᵢ</strong>. Same structural form as Binomial likelihood.</div></div>`},
+    {title:'Log-Likelihood',content:`<div class="math-block"><span class="label">Log-Likelihood Function</span>$$\\ell(p)=n\\ln p+(S-n)\\ln(1-p),\\quad S=\\sum x_i$$</div><div class="conclusion"><div class="icon">✍️</div><div class="text">Strictly concave in p on (0,1) → unique interior maximum guaranteed.</div></div>`},
+    {title:'1st Derivative & MLE',content:`<div class="math-block"><span class="label">Score Equation</span>$$\\frac{d\\ell}{dp}=\\frac{n}{p}-\\frac{S-n}{1-p}=0$$</div><div class="math-block"><span class="label">Solving for p̂</span>$$n(1-p)=p(S-n)\\implies n=pS\\implies\\hat{p}=\\frac{n}{S}=\\frac{1}{\\bar{x}}$$</div><div class="conclusion"><div class="icon">🎯</div><div class="text">MLE of <strong>p</strong> is the <strong>reciprocal of the sample mean</strong>: p̂ = 1/x̄. Since E[X] = 1/p, we estimate p by 1/x̄.</div></div>`},
+    {title:'2nd Derivative Test',content:`<div class="math-block"><span class="label">Second Derivative</span>$$\\frac{d^2\\ell}{dp^2}=-\\frac{n}{p^2}-\\frac{S-n}{(1-p)^2}<0$$</div><div class="conclusion"><div class="icon">✅</div><div class="text">Both terms are strictly negative (assuming S > n). Log-likelihood is strictly concave → <strong>p̂ = 1/x̄ is the global maximum</strong>.</div></div>`}
+  ]},
+  {id:'normal',name:'Normal',icon:'🔔',color:'#facc15',steps:[
+    {title:'PDF',content:`<p class="prose">The <strong>Normal distribution</strong> is the most important distribution in statistics. We estimate both <strong>μ</strong> and <strong>σ²</strong> simultaneously.</p><div class="param-pills"><div class="param-pill">Parameters: <span>μ ∈ ℝ, σ² > 0</span></div><div class="param-pill">Support: <span>x ∈ ℝ</span></div></div><div class="math-block"><span class="label">Probability Density Function</span>$$f(x\\mid\\mu,\\sigma^2)=\\frac{1}{\\sqrt{2\\pi\\sigma^2}}\\exp\\!\\left(-\\frac{(x-\\mu)^2}{2\\sigma^2}\\right)$$</div><div class="conclusion"><div class="icon">📌</div><div class="text">Symmetric bell-shaped PDF characterised by <strong>μ</strong> (location) and <strong>σ²</strong> (spread). Sufficient statistics: (Σxᵢ, Σxᵢ²).</div></div>`},
+    {title:'Likelihood',content:`<div class="math-block"><span class="label">Likelihood Function</span>$$L(\\mu,\\sigma^2)=(2\\pi\\sigma^2)^{-n/2}\\exp\\!\\left(-\\frac{1}{2\\sigma^2}\\sum_{i=1}^n(x_i-\\mu)^2\\right)$$</div><div class="conclusion"><div class="icon">💡</div><div class="text">Likelihood is a function of <strong>two parameters jointly</strong>. We need partial derivatives w.r.t. both μ and σ².</div></div>`},
+    {title:'Log-Likelihood',content:`<div class="math-block"><span class="label">Log-Likelihood Function</span>$$\\ell(\\mu,\\sigma^2)=-\\frac{n}{2}\\ln(2\\pi)-\\frac{n}{2}\\ln(\\sigma^2)-\\frac{1}{2\\sigma^2}\\sum_{i=1}^n(x_i-\\mu)^2$$</div><div class="conclusion"><div class="icon">✍️</div><div class="text">The first term is constant. Maximise over both μ and σ² simultaneously using partial derivatives.</div></div>`},
+    {title:'1st Derivative & MLE',content:`<div class="math-block"><span class="label">Partial w.r.t. μ</span>$$\\frac{\\partial\\ell}{\\partial\\mu}=\\frac{1}{\\sigma^2}\\sum(x_i-\\mu)=0\\implies\\hat{\\mu}=\\bar{x}$$</div><div class="math-block"><span class="label">Partial w.r.t. σ²</span>$$\\frac{\\partial\\ell}{\\partial\\sigma^2}=-\\frac{n}{2\\sigma^2}+\\frac{\\sum(x_i-\\mu)^2}{2\\sigma^4}=0\\implies\\hat{\\sigma}^2=\\frac{1}{n}\\sum(x_i-\\bar{x})^2$$</div><div class="conclusion"><div class="icon">🎯</div><div class="text">MLEs: <strong>μ̂ = x̄</strong> and <strong>σ̂² = (1/n)Σ(xᵢ−x̄)²</strong> (biased; uses n, not n−1).</div></div>`},
+    {title:'2nd Derivative Test',content:`<div class="math-block"><span class="label">Hessian Matrix</span>$$H=\\begin{pmatrix}-\\dfrac{n}{\\sigma^2}&0\\\\[6pt]0&-\\dfrac{n}{2\\sigma^4}\\end{pmatrix}$$</div><div class="math-block"><span class="label">Negative Definiteness</span>$$H_{11}=-\\frac{n}{\\hat{\\sigma}^2}<0,\\quad\\det(H)=\\frac{n^2}{2\\hat{\\sigma}^6}>0$$</div><div class="conclusion"><div class="icon">✅</div><div class="text">The Hessian is <strong>negative definite</strong> → (μ̂, σ̂²) = (x̄, (1/n)Σ(xᵢ−x̄)²) is the <strong>global maximum</strong> of the log-likelihood.</div></div>`}
+  ]}
+];
+
+const STEP_LABELS=['PDF/PMF','Likelihood','Log-Likeli.','1st Deriv.','2nd Deriv.'];
+const STEP_ICONS=['f(x)','L(θ)','ℓ(θ)',"ℓ'(θ)","ℓ''(θ)"];
+
+/* ═══════ STATE ═══════ */
+let curDist=0, curStep=0;
+let state={
+  name:'Your Name', institution:'Institution · Course Code', logoSrc:'',
+  badge:'Statistical Inference', title:'Maximum Likelihood\nEstimation',
+  subtitle:'Explore MLE step-by-step across six fundamental probability distributions — from writing the PDF to verifying the maximum via second derivative test.',
+  theme:'dark', font:'Outfit',
+  accentColors:{binomial:'#4f8cff',poisson:'#a78bfa',uniform:'#34d399',exponential:'#fb923c',geometric:'#f472b6',normal:'#facc15'}
+};
+
+/* ═══════ APPLY STATE ═══════ */
+function applyState(){
+  document.body.className='';
+  if(state.theme!=='dark') document.body.classList.add('theme-'+state.theme);
+  const fontMap={'Outfit':'Outfit,sans-serif','Lora':'Lora,serif','Playfair Display':'Playfair Display,serif','IBM Plex Sans':'IBM Plex Sans,sans-serif','Fira Code':'Fira Code,monospace'};
+  document.documentElement.style.setProperty('--body-font',fontMap[state.font]||'Outfit,sans-serif');
+  ['tbName','brandName','footerName'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=state.name;});
+  ['tbInst','brandInst','footerInst'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=state.institution;});
+  const logoIds=['tbLogoImg','brandLogoImg','footerLogoImg'];
+  logoIds.forEach(id=>{const img=document.getElementById(id);if(!img)return;if(state.logoSrc){img.src=state.logoSrc;img.style.display='block';}else{img.style.display='none';}});
+  const titleEl=document.getElementById('heroTitle');
+  if(titleEl)titleEl.innerHTML=state.title.replace('\n','<br>');
+  const badgeEl=document.getElementById('heroBadge');
+  if(badgeEl)badgeEl.textContent=state.badge;
+  const subEl=document.getElementById('heroSubtitle');
+  if(subEl)subEl.textContent=state.subtitle;
+  DISTS.forEach(d=>{d.color=state.accentColors[d.id]||d.color;});
+  const fy=document.getElementById('footerYear');
+  if(fy)fy.textContent='© '+new Date().getFullYear();
+}
+
+function setDistColor(color){document.documentElement.style.setProperty('--dist-color',color);}
+
+/* ═══════ RENDER ═══════ */
+function renderDistTabs(){
+  document.getElementById('distTabs').innerHTML=DISTS.map((d,i)=>`<button class="dist-tab ${i===curDist?'active':''}" style="--tab-color:${d.color}" onclick="selectDist(${i})"><span class="dot"></span>${d.icon} ${d.name}</button>`).join('');
+}
+function renderStepNav(){
+  document.getElementById('stepNav').innerHTML=STEP_LABELS.map((lbl,i)=>`<button class="step-btn ${i===curStep?'active':''}" onclick="selectStep(${i})"><span class="step-num">${STEP_ICONS[i]}</span><span class="step-label">${lbl}</span></button>`).join('');
+}
+function renderContent(){
+  const dist=DISTS[curDist], step=dist.steps[curStep];
+  setDistColor(dist.color);
+  document.getElementById('cardIcon').textContent=dist.icon;
+  document.getElementById('cardTitle').textContent=`${dist.name} Distribution — ${step.title}`;
+  document.getElementById('stepTag').textContent=`Step ${curStep+1} of 5`;
+  document.getElementById('progressFill').style.width=`${((curStep+1)/5)*100}%`;
+  const body=document.getElementById('cardBody');
+  body.innerHTML=step.content;
+  if(window.MathJax)MathJax.typesetPromise([body]).catch(()=>{});
+  document.getElementById('stepIndicator').textContent=`Step ${curStep+1} / 5`;
+  document.getElementById('prevBtn').disabled=curStep===0;
+  document.getElementById('nextBtn').textContent=curStep===4?'Restart ↺':'Next →';
+}
+
+function selectDist(i){curDist=i;curStep=0;renderDistTabs();renderStepNav();renderContent();}
+function selectStep(i){curStep=i;renderStepNav();renderContent();}
+function navigate(dir){
+  if(dir===1&&curStep===4)curStep=0;
+  else curStep=Math.max(0,Math.min(4,curStep+dir));
+  renderStepNav();renderContent();
+}
+
+/* ═══════ PANELS ═══════ */
+function openPanel(which){
+  document.getElementById('panelOverlay').classList.add('open');
+  document.getElementById('sidePanel').classList.add('open');
+  if(which==='branding')renderBrandingPanel();
+  else if(which==='appearance')renderAppearancePanel();
+  else if(which==='content')renderContentPanel();
+}
+function closePanel(){
+  document.getElementById('panelOverlay').classList.remove('open');
+  document.getElementById('sidePanel').classList.remove('open');
+}
+
+/* ── BRANDING ── */
+function renderBrandingPanel(){
+  document.getElementById('panelTitle').innerHTML='🎓 Branding & Identity';
+  document.getElementById('panelBody').innerHTML=`
+    <div class="panel-section-title">Logo / Profile Picture</div>
+    <div class="logo-upload-area">
+      <input type="file" accept="image/*" onchange="handleLogoUpload(event)">
+      ${state.logoSrc?`<img class="logo-preview" src="${state.logoSrc}" alt="logo">`:`<span class="logo-placeholder">🎓</span>`}
+      <div class="logo-hint">Click to upload logo or photo<br>PNG · JPG · SVG · WebP</div>
+    </div>
+    <div style="text-align:center;margin-top:-8px">
+      <button class="tb-btn" style="margin:0 auto;font-size:0.73rem;display:inline-flex" onclick="clearLogo()">🗑 Remove Logo</button>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Author / Your Name</label>
+      <input class="field-input" id="fName" value="${state.name}" placeholder="e.g. Dr. Priya Sharma">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Institution & Course</label>
+      <input class="field-input" id="fInst" value="${state.institution}" placeholder="e.g. IIT Madras · MA5030">
+    </div>
+    <button class="apply-btn" onclick="saveBranding()">✓ Apply Branding</button>
+    <div class="panel-section-title" style="margin-top:4px">Preview</div>
+    <div style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;">
+      <div style="width:42px;height:42px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">
+        ${state.logoSrc?`<img src="${state.logoSrc}" style="width:100%;height:100%;object-fit:cover">`:'🎓'}
+      </div>
+      <div>
+        <div style="font-size:0.6rem;font-family:var(--mono-font);text-transform:uppercase;letter-spacing:2px;color:var(--muted)">Prepared by</div>
+        <div style="font-weight:600;font-size:0.9rem;color:var(--text)" id="previewName">${state.name}</div>
+        <div style="font-size:0.75rem;color:var(--muted)" id="previewInst">${state.institution}</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('fName').addEventListener('input',e=>{const p=document.getElementById('previewName');if(p)p.textContent=e.target.value||'Your Name';});
+  document.getElementById('fInst').addEventListener('input',e=>{const p=document.getElementById('previewInst');if(p)p.textContent=e.target.value||'Institution';});
+}
+
+function handleLogoUpload(e){
+  const file=e.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{state.logoSrc=ev.target.result;applyState();renderBrandingPanel();showToast('✓ Logo uploaded!');};
+  reader.readAsDataURL(file);
+}
+function clearLogo(){state.logoSrc='';applyState();renderBrandingPanel();showToast('Logo removed');}
+function saveBranding(){
+  state.name=document.getElementById('fName').value||state.name;
+  state.institution=document.getElementById('fInst').value||state.institution;
+  applyState();showToast('✓ Branding saved!');
+}
+
+/* ── APPEARANCE ── */
+const THEMES=[{id:'dark',label:'Dark 🌑'},{id:'light',label:'Light ☀️'},{id:'sepia',label:'Sepia 📜'},{id:'midnight',label:'Midnight 🌌'}];
+const FONTS=['Outfit','Lora','Playfair Display','IBM Plex Sans','Fira Code'];
+const PALETTE=['#4f8cff','#a78bfa','#34d399','#fb923c','#f472b6','#facc15','#22d3ee','#f87171','#a3e635','#e879f9','#ff6b6b','#00b4d8'];
+
+function renderAppearancePanel(){
+  document.getElementById('panelTitle').innerHTML='🎨 Appearance';
+  document.getElementById('panelBody').innerHTML=`
+    <div class="panel-section-title">Page Theme</div>
+    <div class="theme-row">
+      ${THEMES.map(t=>`<div class="theme-chip ${state.theme===t.id?'active':''}" onclick="setTheme('${t.id}')">${t.label}</div>`).join('')}
+    </div>
+
+    <div class="panel-section-title">Body Font</div>
+    <div class="font-chips">
+      ${FONTS.map(f=>`<div class="font-chip ${state.font===f?'active':''}" style="font-family:'${f}',sans-serif" onclick="setFont('${f}')">${f}</div>`).join('')}
+    </div>
+
+    <div class="panel-section-title">Distribution Accent Colors</div>
+    ${DISTS.map(d=>`
+      <div style="margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="font-size:1rem">${d.icon}</span>
+          <span style="font-family:var(--mono-font);font-size:0.72rem;color:var(--dist-color);text-transform:uppercase;letter-spacing:1px">${d.name}</span>
+          <div style="width:16px;height:16px;border-radius:4px;background:${state.accentColors[d.id]};margin-left:auto;border:1px solid var(--border)"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:5px;align-items:center">
+          ${PALETTE.map(c=>`<div class="color-swatch ${state.accentColors[d.id]===c?'active':''}" style="background:${c}" onclick="setAccentColor('${d.id}','${c}',this)"></div>`).join('')}
+          <input type="color" value="${state.accentColors[d.id]}" style="height:28px;width:100%;border:none;border-radius:6px;cursor:pointer;padding:1px;background:var(--surface);border:1px solid var(--border)" onchange="setAccentColor('${d.id}',this.value,null)">
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function setTheme(t){state.theme=t;applyState();renderAppearancePanel();showToast('Theme: '+t);}
+function setFont(f){state.font=f;applyState();renderAppearancePanel();showToast('Font: '+f);}
+function setAccentColor(distId,color){
+  state.accentColors[distId]=color;
+  DISTS.find(d=>d.id===distId).color=color;
+  if(DISTS[curDist].id===distId)setDistColor(color);
+  applyState();renderContent();renderDistTabs();
+  setTimeout(()=>renderAppearancePanel(),50);
+}
+
+/* ── CONTENT ── */
+function renderContentPanel(){
+  document.getElementById('panelTitle').innerHTML='✏️ Edit Content';
+  document.getElementById('panelBody').innerHTML=`
+    <div class="panel-section-title">Hero Section</div>
+    <div class="field-group">
+      <label class="field-label">Badge Text</label>
+      <input class="field-input" id="fBadge" value="${state.badge}" placeholder="Statistical Inference">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Main Title (\\n = line break)</label>
+      <input class="field-input" id="fTitle" value="${state.title}" placeholder="Maximum Likelihood\\nEstimation">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Subtitle Description</label>
+      <textarea class="field-input" id="fSubtitle">${state.subtitle}</textarea>
+    </div>
+    <button class="apply-btn" onclick="saveContent()">✓ Apply Changes</button>
+
+    <div class="panel-section-title" style="margin-top:4px">Add Custom Notes to Steps</div>
+    <p class="prose" style="font-size:0.81rem;margin:0">Select distribution and step, then add your own notes or worked examples:</p>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0">
+      ${DISTS.map((d,i)=>`<button class="tb-btn ${i===curDist?'active':''}" onclick="switchEditDist(${i})" style="font-size:0.73rem;padding:5px 10px">${d.icon} ${d.name}</button>`).join('')}
+    </div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap;margin:6px 0">
+      ${STEP_LABELS.map((l,i)=>`<button class="tb-btn ${i===curStep?'active':''}" onclick="switchEditStep(${i})" style="font-size:0.7rem;padding:4px 9px">${l}</button>`).join('')}
+    </div>
+    <div class="field-group">
+      <label class="field-label">Note for ${DISTS[curDist].name} — ${STEP_LABELS[curStep]}</label>
+      <textarea class="field-input" id="fNote" placeholder="Add additional notes, worked examples, or remarks…" style="min-height:90px"></textarea>
+    </div>
+    <button class="apply-btn ghost" onclick="saveNote()">+ Append Note</button>
+  `;
+}
+
+function saveContent(){
+  state.badge=document.getElementById('fBadge').value||state.badge;
+  state.title=document.getElementById('fTitle').value||state.title;
+  state.subtitle=document.getElementById('fSubtitle').value||state.subtitle;
+  applyState();showToast('✓ Content updated!');
+}
+function switchEditDist(i){curDist=i;renderDistTabs();renderContent();renderContentPanel();}
+function switchEditStep(i){curStep=i;renderStepNav();renderContent();renderContentPanel();}
+function saveNote(){
+  const note=document.getElementById('fNote').value.trim();
+  if(!note)return;
+  DISTS[curDist].steps[curStep].content+=`<div class="math-block" style="margin-top:16px"><span class="label">📝 Instructor Note</span><p class="prose" style="margin:0">${note.replace(/\n/g,'<br>')}</p></div>`;
+  renderContent();showToast('✓ Note added!');
+}
+
+/* ═══════ EXPORT / PRINT ═══════ */
+function printPage(){closePanel();setTimeout(()=>window.print(),300);}
+function exportHTML(){
+  const blob=new Blob([document.documentElement.outerHTML],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='MLE_Explorer_'+state.name.replace(/\s+/g,'_')+'.html';
+  a.click();showToast('✓ HTML exported!');
+}
+
+/* ═══════ TOAST ═══════ */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ═══════ INIT ═══════ */
+applyState();
+renderDistTabs();
+renderStepNav();
+renderContent();
+</script>
+
+
+</body></html>
